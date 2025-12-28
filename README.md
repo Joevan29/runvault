@@ -1,87 +1,189 @@
-# RUNVAULT | AeroPulse Microsite
+# RUNVAULT | AeroPulse Runner 3D Microsite
 
 ![Project Status](https://img.shields.io/badge/status-production_ready-success)
-![Next.js](https://img.shields.io/badge/next.js-14+-black)
-![Tailwind](https://img.shields.io/badge/tailwind-3.0-blue)
-![Three.js](https://img.shields.io/badge/three.js-r3f-orange)
+![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Three.js](https://img.shields.io/badge/Three.js-R3F-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-A high-performance, immersive 3D microsite for the **AeroPulse Runner**. This project demonstrates strict frontend architecture, "Scrollytelling" mechanics, and interactive WebGL assets optimized for production.
+An immersive 3D product microsite concept for **AeroPulse Runner**, built to showcase modern WebGL storytelling with a clean, performance-minded UI.
 
-## 🚀 Key Features
+**Live Demo:** https://YOUR-VERCEL-LINK-HERE  
+**Repository:** https://github.com/YOUR-USERNAME/runvault
 
-### 🧊 Immersive 3D Experience
--   **Core Viewer**: Standardized `ShoeViewer` component with auto-centering and precise bounding-box normalization.
--   **Scrollytelling**: Scroll-driven camera choreography with keyframe interpolation (Home Page).
--   **Interactive Inspection**: 360° product viewer with zoom/orbit controls (Product & Modal).
--   **Performance**: On-demand rendering, `contactShadows`, and aggressive DPR clamping (`1.25`) for 60fps on mobile.
+> Replace the link above after deployment.
 
-### ⚡ Modern Frontend Tech
--   **Framework**: Next.js 14 (App Router) for server-side optimization.
--   **Styling**: Tailwind CSS with a scalable design system (Vertical Rhythm, `max-w-7xl` containers).
--   **Motion**: Framer Motion for smooth UI transitions and efficient entering animations.
--   **Hygiene**: Strict TypeScript typing, component modularity, and clean project structure.
-
-## 🛠️ Tech Stack
-
-| Category | Technology | Usage |
-|----------|------------|-------|
-| **Core** | Next.js 14, TypeScript | App architecture and type safety |
-| **3D** | @react-three/fiber, Drei | WebGL Canvas and Helpers |
-| **Styles** | Tailwind CSS | Utility-first styling |
-| **State** | React Hooks | Local interaction state |
-
-## 📦 Project Structure
-
-```bash
-runvault/
-├── app/                  # Next.js App Router Pages
-│   ├── about/            # Responsive About Page
-│   ├── gallery/          # 3D Gallery Grid
-│   └── product/          # E-commerce Layout
-├── components/           # Reusable UI Blocks
-│   ├── 3d/               # ShoeViewer, Three.js Logic
-│   ├── home/             # Hero, ScrollyShowcase
-│   └── ui/               # Buttons, Badges, Containers
-├── public/               # Static Assets
-│   └── shoe.glb          # 3D Model (Keep small!)
-└── ...config files
-```
-
-## 🏁 Getting Started
-
-1.  **Clone & Install**
-    ```bash
-    git clone https://github.com/your-username/runvault.git
-    cd runvault
-    npm install
-    # or
-    yarn install
-    ```
-
-2.  **Run Development**
-    ```bash
-    npm run dev
-    ```
-    Visit `http://localhost:3000`.
-
-3.  **Build for Production**
-    ```bash
-    npm run build
-    npm start
-    ```
-
-## 🎨 Asset Workflow
-
--   **GLB Models**: Place in `/public`. Ensure models are compressed (Draco/Meshopt) if >2MB.
--   **Images**: Use Next.js `<Image/>` for auto-optimization.
--   **3D Viewer**: The `<ShoeViewer />` component handles normalization automatically. No need to manual center models in Blender.
-
-## 🔐 Deployment & Hygiene
-
--   **Secrets**: This project currently uses **NO** environment variables(`process.env`).
--   **Git**: `.env` files and `node_modules` are strictly ignored.
--   **Vercel**: Zero-config deployment recommended.
+![Preview](public/images/preview.png)
+> Replace this image with a real screenshot or short GIF (recommended: hero + scrollytelling frame).
 
 ---
 
-**© 2025 RUNVAULT**. Concept Project.
+## About
+
+RUNVAULT is a portfolio-grade microsite that blends minimalist e-commerce presentation with interactive 3D storytelling. The goal is to demonstrate how a modern product landing page can feel premium, responsive, and performant while using real-time WebGL visuals.
+
+This project focuses on:
+- A smooth scrollytelling section (scroll-driven 3D choreography).
+- A product view that stays readable on mobile and desktop.
+- A gallery experience that feels consistent and polished.
+- Dark and light theme support.
+
+---
+
+## Key Features
+
+### 3D Experience
+- **3D Viewer (GLB):** Renders a `.glb` shoe model with auto-centering and fit-to-frame camera logic.
+- **Scrollytelling:** Scroll progress drives model and camera motion with subtle transitions.
+- **Performance Mindset:** Pixel ratio clamping, conditional render loops, and lightweight lighting.
+
+### UI and UX
+- **Responsive Layout:** Mobile-first grid system and consistent spacing across sections.
+- **Dark and Light Theme:** Theme toggle using `next-themes` (persisted across refresh).
+- **Clean Motion:** Minimal animations to keep the UI smooth and readable.
+
+### Product and Content
+- **Product Showcase:** Specs and tech highlights presented in a clean layout.
+- **Gallery:** Thumbnail grid with optional modal preview.
+- **About Section:** Structured product narrative with a consistent responsive grid.
+- **Contact:** Premium contact layout with client-side validation and mailto submit (no backend).
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+|---------|------------|
+| Core | Next.js 14 (App Router) |
+| Language | TypeScript |
+| 3D | React Three Fiber (R3F), Drei |
+| Styling | Tailwind CSS |
+| Animation | Framer Motion, GSAP (optional, based on your repo) |
+| UI Primitives | Radix UI (optional, based on your repo) |
+| Icons | Lucide React |
+
+> Keep only the tools that actually exist in your `package.json`.
+
+---
+
+## Project Structure
+
+```bash
+runvault/
+├── app/                  # Next.js App Router pages
+│   ├── product/          # Product page
+│   ├── gallery/          # Gallery page
+│   ├── about/            # About page
+│   ├── contact/          # Contact page (or section)
+│   └── layout.tsx        # Root layout (Navbar/Footer/Theme)
+├── components/           # Reusable components
+│   ├── three/            # Three.js / R3F components (Canvas, Model, Controls)
+│   ├── home/             # Hero + Scrollytelling sections
+│   └── ui/               # UI atoms (Button, Card, Badge)
+├── public/
+│   ├── models/           # 3D assets (GLB)
+│   │   └── shoe.glb
+│   └── images/           # Screenshots, action shots, preview
+└── lib/                  # Helpers (math, scroll utils, constants)
+```
+
+Getting Started
+Prerequisites
+Node.js 18+
+
+Installation
+```
+git clone https://github.com/YOUR-USERNAME/runvault.git
+cd runvault
+npm install
+```
+Run Development Server
+```
+npm run dev
+```
+Open:
+
+http://localhost:3000
+Production Build
+```
+npm run build
+npm run start
+```
+Assets
+3D Model
+Place your GLB file here:
+
+public/models/shoe.glb
+
+Recommended optimization:
+
+Keep textures small enough for web delivery.
+
+Use GLB optimization tools such as gltfpack or gltf-transform for smaller bundle sizes.
+
+Images
+Put screenshots and marketing images inside public/images/.
+
+Use next/image where possible for responsive optimization.
+
+Environment Variables
+If your project uses environment variables:
+
+```
+cp .env.example .env.local
+```
+Example .env.example (only if required):
+```
+# NEXT_PUBLIC_ANALYTICS_ID=
+```
+Important:
+
+Never commit .env.local or secrets to GitHub.
+
+Deployment
+Recommended: Vercel
+
+Push the repository to GitHub
+
+Import the repo in Vercel
+
+Add environment variables if needed
+
+Deploy
+
+After deployment, replace:
+
+Live Demo link at the top of this README
+
+Preview image path if you use a different screenshot
+
+Contributing
+This is a portfolio project, but contributions are welcome.
+
+Fork this repository
+
+Create a new branch:
+
+```
+git checkout -b feature/your-feature
+```
+Commit your changes:
+```
+git commit -m "Add your feature"
+```
+Push your branch:
+```
+git push origin feature/your-feature
+```
+Open a Pull Request
+
+License
+Distributed under the MIT License. See LICENSE for details.
+
+Credits
+© 2025 RUNVAULT
+Concept and implementation by Jvnprmnachmd.
+
+
+
+
