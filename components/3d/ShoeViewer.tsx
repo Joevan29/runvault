@@ -20,7 +20,7 @@ export interface ShoeViewerApi {
 interface ShoeViewerProps {
     mode: ViewerMode;
     glbPath?: string;
-    view?: ViewPreset; 
+    view?: ViewPreset;
     className?: string;
     onReady?: (api: ShoeViewerApi) => void;
     active?: boolean;
@@ -67,8 +67,6 @@ const ViewerInner = ({
         const r = Math.max(size.x, size.y, size.z) / 2;
         setRadius(r);
 
-        console.log(`[ShoeViewer] Normalized: r=${r.toFixed(4)} center=[${center.toArray().join(',')}]`);
-
         if (onReady) {
             onReady({
                 model: root,
@@ -91,40 +89,36 @@ const ViewerInner = ({
         if (mode === "modal") multiplier = 3.4;
 
         const dist = radius * multiplier;
-
-
         const defaultPos = new THREE.Vector3(dist * 0.9, dist * 0.5, dist * 1.1);
 
-        if (view) {
+        if (view && mode !== "homeScrolly") {
             if (view === "front34") defaultPos.set(dist * 0.9, dist * 0.5, dist * 1.1);
             if (view === "side") defaultPos.set(dist, 0, 0);
             if (view === "top") defaultPos.set(0, dist, 0);
             if (view === "heel") defaultPos.set(-dist, 0.5 * radius, -dist * 0.5).setLength(dist);
             if (view === "sole") defaultPos.set(0, -dist, 0);
-            if (view === "detail") defaultPos.set(dist * 0.5, dist * 0.3, dist * 0.5); // Closer?
+            if (view === "detail") defaultPos.set(dist * 0.5, dist * 0.3, dist * 0.5);
         }
 
+        // Apply posisi kamera awal
         if (mode !== "homeScrolly") {
             camera.position.copy(defaultPos);
-            camera.lookAt(0, 0, 0); 
+            camera.lookAt(0, 0, 0);
         } else {
             camera.position.set(dist * 0.9, dist * 0.5, dist * 1.1);
             camera.lookAt(0, 0, 0);
         }
 
-        if (camera instanceof THREE.PerspectiveCamera) {
-            camera.updateProjectionMatrix();
-        }
+        camera.updateProjectionMatrix();
 
         if (controlsRef.current) {
             const ctrl = controlsRef.current;
-            ctrl.target.set(0, 0, 0);
-
             const allowOrbit = mode === "product" || mode === "modal";
             ctrl.enabled = allowOrbit;
-
+            
             if (allowOrbit) {
-                ctrl.minDistance = radius * 2.8;
+                ctrl.target.set(0, 0, 0);
+                ctrl.minDistance = radius * 2.0;
                 ctrl.maxDistance = radius * 6.0;
                 ctrl.enablePan = false;
                 ctrl.enableDamping = true;
@@ -132,26 +126,23 @@ const ViewerInner = ({
             }
             ctrl.update();
         }
-
+        
         invalidate();
     }, [radius, mode, view, camera, invalidate]);
 
     useFrame((state, delta) => {
         if (mode === "homeHero" && modelRef.current && active) {
             modelRef.current.rotation.y += delta * 0.15;
-            invalidate();
-        }
-
-        if ((mode === "product" || mode === "modal") && active) {
         }
     });
 
     useMemo(() => {
-        const c = new THREE.Color("#0ea5e9");
+        const c = new THREE.Color("#0ea5e9"); 
         clonedScene.traverse((child: any) => {
             if (child.isMesh) {
-                child.castShadow = false;
+                child.castShadow = false; 
                 child.receiveShadow = false;
+                
                 if (child.name.toLowerCase().includes("upper") || child.name.toLowerCase().includes("shoe")) {
                     if (child.material) {
                         child.material = child.material.clone();
@@ -176,6 +167,8 @@ const ViewerInner = ({
                 scale={10}
                 blur={2.5}
                 far={4}
+                frames={1} 
+                resolution={512} 
             />
 
             <OrbitControls
@@ -196,13 +189,10 @@ export function ShoeViewer({
     active = true
 }: ShoeViewerProps) {
 
-    const [dpr, setDpr] = useState(1);
-    useEffect(() => {
-        setDpr(Math.min(window.devicePixelRatio, 1.25));
-    }, []);
+    const isAnimationHeavy = mode === "homeScrolly" || mode === "homeHero";
+    const frameloop = active && isAnimationHeavy ? "always" : "demand";
 
-    const frameloop = mode === "galleryThumb" ? "demand" : (active ? "always" : "never");
-
+    // CSS Classes
     const defaultSizing = useMemo(() => {
         if (mode === "homeHero") return "h-[520px] lg:h-[70vh] w-full";
         if (mode === "product") return "aspect-square h-[360px] md:h-[440px] lg:h-[520px] w-full";
@@ -212,13 +202,11 @@ export function ShoeViewer({
         return "h-full w-full";
     }, [mode]);
 
-    const finalClass = className || defaultSizing;
-
     return (
-        <div className={cn("relative overflow-hidden", finalClass)}>
+        <div className={cn("relative overflow-hidden", className || defaultSizing)}>
             <Canvas
                 frameloop={frameloop}
-                dpr={[1, dpr]}
+                dpr={[1, 1.5]} 
                 shadows={false}
                 gl={{
                     powerPreference: "high-performance",
