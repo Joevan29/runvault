@@ -36,18 +36,14 @@ export function HomeScrollyShowcase() {
     const [viewerApi, setViewerApi] = useState<ShoeViewerApi | null>(null);
     const [isVisible, setIsVisible] = useState(false);
 
-    const [debugInfo, setDebugInfo] = useState({ progress: 0, step: 0 });
-    const isDev = process.env.NODE_ENV === "development";
-
     useEffect(() => {
         const obs = new IntersectionObserver(([entry]) => {
             setIsVisible(entry.isIntersecting);
-        }, { threshold: 0 });
+        }, { threshold: 0.1 });
 
         if (containerRef.current) obs.observe(containerRef.current);
         return () => obs.disconnect();
     }, []);
-
     const handleScroll = useCallback(() => {
         if (!containerRef.current) return;
 
@@ -55,8 +51,8 @@ export function HomeScrollyShowcase() {
         const viewportHeight = window.innerHeight;
         const sectionHeight = rect.height;
         const top = rect.top;
-
         const maxScroll = sectionHeight - viewportHeight;
+
         if (maxScroll <= 0) return;
 
         const scrollYWithin = -top;
@@ -64,12 +60,9 @@ export function HomeScrollyShowcase() {
 
         progressRef.current = p;
 
-        if (isDev) {
-        }
-
         const phase = Math.min(Math.floor(p * 4), 3);
         setActivePhase((prev) => (prev !== phase ? phase : prev));
-    }, [isDev]);
+    }, []);
 
     useEffect(() => {
         window.addEventListener("scroll", handleScroll, { passive: true });
@@ -81,15 +74,7 @@ export function HomeScrollyShowcase() {
         if (!isVisible || !viewerApi) return;
 
         const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-        if (mediaQuery.matches) {
-            const { camera, radius } = viewerApi;
-            if (camera && radius) {
-                const r = radius;
-                camera.position.set(r * 6.0, r * 1.5, r * 3.0);
-                camera.lookAt(0, r * 0.1, 0);
-            }
-            return;
-        }
+        if (mediaQuery.matches) return;
 
         let frameId: number;
         const { camera, radius } = viewerApi;
@@ -100,22 +85,24 @@ export function HomeScrollyShowcase() {
             { pos: new THREE.Vector3(6.0 * r, 1.5 * r, 3.0 * r), look: new THREE.Vector3(0, 0.1 * r, 0) },
             { pos: new THREE.Vector3(4.5 * r, 3.5 * r, 2.8 * r), look: new THREE.Vector3(0, 0.2 * r, 0) },
             { pos: new THREE.Vector3(-4.0 * r, 2.0 * r, -5.0 * r), look: new THREE.Vector3(0, 0.1 * r, 0) },
+            { pos: new THREE.Vector3(-4.0 * r, 2.0 * r, -5.0 * r), look: new THREE.Vector3(0, 0.1 * r, 0) },
         ];
 
         const targetPos = new THREE.Vector3();
         const targetLook = new THREE.Vector3();
-        const currentLook = new THREE.Vector3(0, 0, 0);
         const lookTarget = new THREE.Vector3(0, 0, 0);
 
         const loop = () => {
             const p = progressRef.current;
-
             const totalSegs = 3;
+            
             const rawSeg = p * totalSegs;
             const idx = Math.floor(rawSeg);
             const nextIdx = Math.min(idx + 1, totalSegs);
+            
             const t = rawSeg - idx; 
-            const easeT = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            
+            const easeT = t * t * (3 - 2 * t);
 
             const start = KF[Math.min(idx, 3)];
             const end = KF[Math.min(nextIdx, 3)];
@@ -124,15 +111,12 @@ export function HomeScrollyShowcase() {
                 targetPos.lerpVectors(start.pos, end.pos, easeT);
                 targetLook.lerpVectors(start.look, end.look, easeT);
 
-                const alpha = 0.1;
+                const damping = 0.1; 
 
-                camera.position.lerp(targetPos, alpha);
-                lookTarget.lerp(targetLook, alpha);
+                camera.position.lerp(targetPos, damping);
+                lookTarget.lerp(targetLook, damping);
 
                 camera.lookAt(lookTarget);
-                if (camera instanceof THREE.PerspectiveCamera) {
-                    camera.updateProjectionMatrix();
-                }
             }
 
             frameId = requestAnimationFrame(loop);
@@ -148,11 +132,10 @@ export function HomeScrollyShowcase() {
             className="relative bg-background"
             style={{ height: "360vh" }}
         >
-
-
             <div className="sticky top-0 h-screen w-full overflow-hidden">
                 <div className="absolute inset-0 z-0 bg-background">
                     <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 via-background to-background" />
+                    
                     <ShoeViewer
                         mode="homeScrolly"
                         active={isVisible}
@@ -162,7 +145,7 @@ export function HomeScrollyShowcase() {
                 </div>
 
                 <div className="relative z-10 w-full h-full max-w-7xl mx-auto px-6 grid grid-cols-12 pointer-events-none">
-
+                    
                     <div className="hidden lg:flex col-span-2 flex-col justify-center items-center h-full">
                         <div className="relative h-64 w-1 bg-white/10 rounded-full flex flex-col justify-between items-center py-0">
                             <motion.div
