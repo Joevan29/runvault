@@ -8,10 +8,8 @@
 
 Microsite 3D bertema produk sepatu lari dengan pengalaman **WebGL scrollytelling** yang tetap rapi, cepat, dan responsif untuk mobile, tablet, dan desktop.
 
-- **Demo:** https://YOUR-VERCEL-LINK-HERE  
-- **Repo:** https://github.com/YOUR-USERNAME/runvault
-
-> Ganti link demo setelah deploy.
+- **Demo:** https://runvault.vercel.app  
+- **Repo:** https://github.com/Joevan29/runvault
 
 ![Preview](public/images/preview.png)
 
