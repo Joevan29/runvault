@@ -1,189 +1,201 @@
 # RUNVAULT | AeroPulse Runner 3D Microsite
 
-![Project Status](https://img.shields.io/badge/status-production_ready-success)
+![status](https://img.shields.io/badge/status-production_ready-success)
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Three.js](https://img.shields.io/badge/Three.js-R3F-orange)
-![License](https://img.shields.io/badge/license-MIT-green)
+![license](https://img.shields.io/badge/license-MIT-green)
 
-An immersive 3D product microsite concept for **AeroPulse Runner**, built to showcase modern WebGL storytelling with a clean, performance-minded UI.
+Microsite 3D bertema produk sepatu lari dengan pengalaman **WebGL scrollytelling** yang tetap rapi, cepat, dan responsif untuk mobile, tablet, dan desktop.
 
-**Live Demo:** https://YOUR-VERCEL-LINK-HERE  
-**Repository:** https://github.com/YOUR-USERNAME/runvault
+- **Demo:** https://YOUR-VERCEL-LINK-HERE  
+- **Repo:** https://github.com/YOUR-USERNAME/runvault
 
-> Replace the link above after deployment.
+> Ganti link demo setelah deploy.
 
 ![Preview](public/images/preview.png)
-> Replace this image with a real screenshot or short GIF (recommended: hero + scrollytelling frame).
+
+> Rekomendasi: ganti `public/images/preview.png` dengan screenshot asli, atau GIF pendek yang menampilkan hero dan scrollytelling.
 
 ---
 
-## About
+## Ringkasan
 
-RUNVAULT is a portfolio-grade microsite that blends minimalist e-commerce presentation with interactive 3D storytelling. The goal is to demonstrate how a modern product landing page can feel premium, responsive, and performant while using real-time WebGL visuals.
+RUNVAULT adalah project portfolio yang menggabungkan:
+- Presentasi produk yang minimal dan clean
+- Viewer 3D berbasis GLB
+- Scrollytelling (gerak kamera atau model mengikuti scroll)
+- Theme toggle (dark dan light)
+- Konten produk (product, gallery, about, contact)
 
-This project focuses on:
-- A smooth scrollytelling section (scroll-driven 3D choreography).
-- A product view that stays readable on mobile and desktop.
-- A gallery experience that feels consistent and polished.
-- Dark and light theme support.
+Project ini sengaja dibuat tanpa backend agar fokus ke kualitas UI, interaksi 3D, dan performa.
 
 ---
 
-## Key Features
+## Fitur Utama
 
-### 3D Experience
-- **3D Viewer (GLB):** Renders a `.glb` shoe model with auto-centering and fit-to-frame camera logic.
-- **Scrollytelling:** Scroll progress drives model and camera motion with subtle transitions.
-- **Performance Mindset:** Pixel ratio clamping, conditional render loops, and lightweight lighting.
+### 1) 3D dan Scrollytelling
+- **GLB Viewer:** render model sepatu `.glb` dengan auto-centering dan fit-to-frame agar ukuran model stabil di berbagai layar.
+- **Scrollytelling Section:** sequence berbasis progress scroll, konten card berubah per step.
+- **Performance-aware rendering:** pixel ratio clamping, render loop dinyalakan hanya saat diperlukan, lighting ringan.
 
-### UI and UX
-- **Responsive Layout:** Mobile-first grid system and consistent spacing across sections.
-- **Dark and Light Theme:** Theme toggle using `next-themes` (persisted across refresh).
-- **Clean Motion:** Minimal animations to keep the UI smooth and readable.
+### 2) UI dan UX
+- **Responsive layout:** grid dan spacing konsisten untuk mobile, tablet, dan desktop.
+- **Dark dan light mode:** theme toggle via `next-themes`, state tersimpan saat refresh.
+- **Motion halus:** transisi fokus pada keterbacaan, bukan efek berlebihan.
 
-### Product and Content
-- **Product Showcase:** Specs and tech highlights presented in a clean layout.
-- **Gallery:** Thumbnail grid with optional modal preview.
-- **About Section:** Structured product narrative with a consistent responsive grid.
-- **Contact:** Premium contact layout with client-side validation and mailto submit (no backend).
+### 3) Konten Produk
+- **Product page:** tech highlights, specs, dan CTA (pre-order).
+- **Gallery:** grid thumbnail, modal preview opsional (bisa 3D).
+- **About:** penjelasan desain, material, dan nilai produk.
+- **Contact:** form dengan validasi client-side dan submit via `mailto:` (tanpa server).
 
 ---
 
 ## Tech Stack
 
-| Category | Technology |
-|---------|------------|
-| Core | Next.js 14 (App Router) |
-| Language | TypeScript |
-| 3D | React Three Fiber (R3F), Drei |
-| Styling | Tailwind CSS |
-| Animation | Framer Motion, GSAP (optional, based on your repo) |
-| UI Primitives | Radix UI (optional, based on your repo) |
-| Icons | Lucide React |
+> Daftar final bergantung pada isi `package.json` kamu.
 
-> Keep only the tools that actually exist in your `package.json`.
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **3D:** React Three Fiber (R3F), Drei
+- **Styling:** Tailwind CSS
+- **Theme:** next-themes
+- **Animation:** Framer Motion dan atau GSAP (jika terpasang)
+- **Icons:** Lucide React (jika terpasang)
+- **UI primitives:** Radix UI (jika terpasang)
 
 ---
 
-## Project Structure
+## Struktur Project
 
 ```bash
 runvault/
-├── app/                  # Next.js App Router pages
-│   ├── product/          # Product page
-│   ├── gallery/          # Gallery page
-│   ├── about/            # About page
-│   ├── contact/          # Contact page (or section)
-│   └── layout.tsx        # Root layout (Navbar/Footer/Theme)
-├── components/           # Reusable components
-│   ├── three/            # Three.js / R3F components (Canvas, Model, Controls)
-│   ├── home/             # Hero + Scrollytelling sections
-│   └── ui/               # UI atoms (Button, Card, Badge)
+├── app/                   # Next.js App Router
+│   ├── page.tsx           # Homepage
+│   ├── product/           # Product page
+│   ├── gallery/           # Gallery page
+│   ├── about/             # About page
+│   ├── contact/           # Contact page
+│   └── layout.tsx         # Root layout (Navbar, Footer, Theme)
+├── components/
+│   ├── three/             # Komponen 3D (Canvas, loader, helpers)
+│   ├── home/              # Hero, scrolly story, sections homepage
+│   └── ui/                # Button, Card, Badge, dsb
 ├── public/
-│   ├── models/           # 3D assets (GLB)
-│   │   └── shoe.glb
-│   └── images/           # Screenshots, action shots, preview
-└── lib/                  # Helpers (math, scroll utils, constants)
+│   ├── models/
+│   │   └── shoe.glb       # Asset 3D utama
+│   └── images/            # Screenshot, action-shot, preview
+└── lib/                   # Helpers, constants, util scroll, util math
 ```
 
-Getting Started
-Prerequisites
-Node.js 18+
+---
 
-Installation
-```
-git clone https://github.com/YOUR-USERNAME/runvault.git
-cd runvault
+## Menjalankan Project
+
+### Prasyarat
+- Node.js 18+
+
+### Install
+Gunakan salah satu package manager saja.
+
+#### Opsi A: npm
+```bash
 npm install
-```
-Run Development Server
-```
 npm run dev
 ```
-Open:
 
-http://localhost:3000
-Production Build
+#### Opsi B: pnpm (disarankan kalau repo kamu pakai `pnpm-lock.yaml`)
+```bash
+pnpm install
+pnpm dev
 ```
+
+Buka:
+- http://localhost:3000
+
+### Build produksi
+```bash
 npm run build
 npm run start
 ```
-Assets
-3D Model
-Place your GLB file here:
 
-public/models/shoe.glb
+---
 
-Recommended optimization:
+## Workflow Asset
 
-Keep textures small enough for web delivery.
+### Model 3D (GLB)
+Taruh model di:
+- `public/models/shoe.glb`
 
-Use GLB optimization tools such as gltfpack or gltf-transform for smaller bundle sizes.
+Rekomendasi optimasi:
+- Gunakan `gltfpack` atau `gltf-transform` untuk memperkecil ukuran file.
+- Jaga ukuran tekstur agar realistis untuk web.
 
-Images
-Put screenshots and marketing images inside public/images/.
+### Gambar dan Preview
+- Screenshot, banner, action-shot: `public/images/`
+- Gunakan `next/image` untuk gambar yang tampil di UI.
 
-Use next/image where possible for responsive optimization.
+---
 
-Environment Variables
-If your project uses environment variables:
+## Environment Variables
 
-```
-cp .env.example .env.local
-```
-Example .env.example (only if required):
-```
+Jika kamu pakai env, jangan pernah commit nilai rahasia. Buat file contoh:
+
+`.env.example`
+```env
 # NEXT_PUBLIC_ANALYTICS_ID=
 ```
-Important:
 
-Never commit .env.local or secrets to GitHub.
-
-Deployment
-Recommended: Vercel
-
-Push the repository to GitHub
-
-Import the repo in Vercel
-
-Add environment variables if needed
-
-Deploy
-
-After deployment, replace:
-
-Live Demo link at the top of this README
-
-Preview image path if you use a different screenshot
-
-Contributing
-This is a portfolio project, but contributions are welcome.
-
-Fork this repository
-
-Create a new branch:
-
+Lalu untuk lokal:
+```bash
+cp .env.example .env.local
 ```
-git checkout -b feature/your-feature
-```
-Commit your changes:
-```
-git commit -m "Add your feature"
-```
-Push your branch:
-```
-git push origin feature/your-feature
-```
-Open a Pull Request
 
-License
-Distributed under the MIT License. See LICENSE for details.
+---
 
-Credits
-© 2025 RUNVAULT
-Concept and implementation by Jvnprmnachmd.
+## Deployment
 
+Direkomendasikan deploy ke Vercel:
+1. Push repo ke GitHub
+2. Import project di Vercel
+3. Set environment variables jika ada
+4. Deploy
+5. Update link Demo di bagian atas README
 
+---
 
+## Troubleshooting cepat
 
+### 3D tidak tampil atau blank
+- Pastikan path model benar: `public/models/shoe.glb` dan dipanggil sebagai `/models/shoe.glb`
+- Pastikan canvas tidak ketutup overlay. Cek `z-index` dan `pointer-events`
+- Turunkan pixel ratio jika terasa berat di mobile
+
+### Theme toggle tidak bisa diklik
+- Pastikan toggle adalah client component dan tidak ketutup layer lain
+- Pastikan `ThemeProvider` membungkus app dan `darkMode: "class"` di Tailwind config
+
+---
+
+## Contributing
+
+Kontribusi terbuka untuk perbaikan UI, performa, dan kualitas scrollytelling.
+1. Fork repository
+2. Buat branch fitur: `git checkout -b feature/nama-fitur`
+3. Commit: `git commit -m "Add feature"`
+4. Push: `git push origin feature/nama-fitur`
+5. Buat Pull Request
+
+---
+
+## License
+
+MIT License. Lihat file `LICENSE` jika tersedia.
+
+---
+
+## Credits
+
+© 2025 RUNVAULT  
+Concept dan implementasi oleh **Jvnprmnachmd**.
